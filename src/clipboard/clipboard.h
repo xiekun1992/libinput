@@ -17,13 +17,13 @@
 #endif
 struct Clipboard {
   bool notify;
-  char* content;
+  wchar_t* content;
   void (*fn)(void);
 };
 DLL_EXPORT void clipboard_init();
 DLL_EXPORT void clipboard_dispose();
-DLL_EXPORT bool write_text(char* text);
-DLL_EXPORT char* read_text();
+DLL_EXPORT bool write_text(wchar_t* text);
+DLL_EXPORT wchar_t* read_text();
 // bool write_files(std::vector<std::u16string> files);
 // std::vector<std::u16string> read_files();
 DLL_EXPORT void capture(void (*fn)(void));

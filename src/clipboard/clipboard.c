@@ -3,7 +3,7 @@
 struct Clipboard context;
 
 DLL_EXPORT void clipboard_init() {
-  context.content = (char*)malloc(sizeof(char) * 1024 * 1024);
+  context.content = (wchar_t*)malloc(sizeof(wchar_t) * 1024 * 1024);
   context.notify = false;
 }
 
@@ -37,17 +37,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 }
 #endif
 
-DLL_EXPORT bool write_text(char* text) {
+DLL_EXPORT bool write_text(wchar_t* text) {
   bool res = false;
 #if _WIN32 == 1
   OpenClipboard(0);
-  HGLOBAL clipbuffer = GlobalAlloc(GMEM_DDESHARE, strlen(text) + 1);
+  HGLOBAL clipbuffer = GlobalAlloc(GMEM_DDESHARE, (wcslen(text) + 1) * sizeof(wchar_t));
   if (clipbuffer != NULL) {
-    char* buffer = (char*)GlobalLock(clipbuffer);
+    wchar_t* buffer = (wchar_t*)GlobalLock(clipbuffer);
     if (buffer != NULL) {
-      memcpy(buffer, text, strlen(text));
       EmptyClipboard();
-      SetClipboardData(CF_TEXT, clipbuffer);
+      wcscpy(buffer, text);
+      SetClipboardData(CF_UNICODETEXT, clipbuffer);
+
       GlobalUnlock(clipbuffer);
       res = true;
     }
@@ -57,28 +58,29 @@ DLL_EXPORT bool write_text(char* text) {
   return res;
 }
 
-DLL_EXPORT char* read_text() {
-  strcpy(context.content, "");
+DLL_EXPORT wchar_t* read_text() {
+  wchar_t *empty = L"";
 #if _WIN32 == 1
   OpenClipboard(0);
 
-  if (!IsClipboardFormatAvailable(CF_UNICODETEXT) && !IsClipboardFormatAvailable(CF_TEXT)) {
-    return context.content;
+  if (!IsClipboardFormatAvailable(CF_UNICODETEXT)) {
+    return empty;
   }
 
-  HANDLE handle = (HANDLE)GetClipboardData(CF_TEXT);
+  HANDLE handle = (HANDLE)GetClipboardData(CF_UNICODETEXT);
   if (handle != NULL) {
-    if (GlobalLock(handle) != NULL) {
-      char* buffer = (char*)handle;
-      int len = strlen(buffer);
-      strncpy(context.content, buffer, len);
-      context.content[len] = '\0';
+    wchar_t* buffer = GlobalLock(handle);
+    if (buffer != NULL) {
+      wcscpy(context.content, buffer);
+
       GlobalUnlock(handle);
+      CloseClipboard();
+      return context.content;
     }
   }
   CloseClipboard();
 #endif
-  return context.content;
+  return empty;
 }
 
 // bool write_files(std::vector<std::u16string> files) {
