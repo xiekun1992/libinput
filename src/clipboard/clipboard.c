@@ -41,7 +41,7 @@ DLL_EXPORT bool write_text(wchar_t* text) {
   bool res = false;
 #if _WIN32 == 1
   OpenClipboard(0);
-  HGLOBAL clipbuffer = GlobalAlloc(GMEM_DDESHARE, (wcslen(text) + 1) * sizeof(wchar_t));
+  HGLOBAL clipbuffer = GlobalAlloc(GMEM_MOVEABLE, (wcslen(text) + 1) * sizeof(wchar_t));
   if (clipbuffer != NULL) {
     wchar_t* buffer = (wchar_t*)GlobalLock(clipbuffer);
     if (buffer != NULL) {
