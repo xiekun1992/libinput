@@ -8,6 +8,7 @@ set(
   ./src/input/keyboard.c
   ./src/input/listener.c
   ./src/clipboard/clipboard.c
+  ./src/utils.c
 )
 
 # target_link_libraries($(PROJECT_NAME))
