@@ -22,7 +22,7 @@ DLL_EXPORT void keyboard_dispose() {
 #endif
 }
 
-DLL_EXPORT int charToKeycode(int scancode) {
+DLL_EXPORT int scancode_to_keycode(int scancode) {
   // VkKeyScanEx(keystr.at(0), context.kbl);
 #if __linux == 1
 #elif _WIN32 == 1
@@ -32,7 +32,7 @@ DLL_EXPORT int charToKeycode(int scancode) {
 }
 
 DLL_EXPORT bool keydown(int scancode) {
-  int code = charToKeycode(scancode);
+  int code = scancode_to_keycode(scancode);
   if (code > 0) {
 #if __linux == 1
     unsigned int keycode = XKeysymToKeycode(display, code);
@@ -49,7 +49,7 @@ DLL_EXPORT bool keydown(int scancode) {
 }
 
 DLL_EXPORT bool keyup(int scancode) {
-  int code = charToKeycode(scancode);
+  int code = scancode_to_keycode(scancode);
   if (code > 0) {
 #if __linux == 1
     unsigned int keycode = XKeysymToKeycode(display, code);

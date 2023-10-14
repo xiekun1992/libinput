@@ -92,6 +92,11 @@ LRESULT CALLBACK deviceHookProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     UINT size = sizeof(input);
     GetRawInputData(hRawInput, RID_INPUT, &input, &size, sizeof(RAWINPUTHEADER));
     // printf("mouse rel move = %ld, %ld\n", input.data.mouse.lLastX, input.data.mouse.lLastY);
+    if (MOUSE_MOVE_RELATIVE == input.data.mouse.usFlags) {
+      // printf("mouse rel %d, move = %ld, %ld\n", input.data.mouse.usFlags, input.data.mouse.lLastX, input.data.mouse.lLastY);
+      // long params[5] = {L_MOUSEMOVEREL, input.data.mouse.lLastX, input.data.mouse.lLastY, 0, 0};
+      // context.mouseHanlder(params);
+    }
   }
   return DefWindowProc(hwnd, msg, wParam, lParam);
 }

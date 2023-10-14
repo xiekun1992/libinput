@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.26)
 
-project(libcapture)
+project(libinput)
 
 set(
   SRC
   ./src/input/mouse.c
   ./src/input/keyboard.c
-  ./src/input/listener.c
-  ./src/clipboard/clipboard.c
-  ./src/utils.c
+  # ./src/input/listener.c
+  # ./src/clipboard/clipboard.c
+  # ./src/utils.c
 )
 
 # target_link_libraries($(PROJECT_NAME))

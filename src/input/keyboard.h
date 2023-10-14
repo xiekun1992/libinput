@@ -29,4 +29,4 @@ DLL_EXPORT void keyboard_init();
 DLL_EXPORT void keyboard_dispose();
 DLL_EXPORT bool keydown(int scancode);
 DLL_EXPORT bool keyup(int scancode);
-DLL_EXPORT int charToKeycode(int scancode);
+DLL_EXPORT int scancode_to_keycode(int scancode);
